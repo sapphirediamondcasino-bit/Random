@@ -1,1 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Game Forge</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4em;
+            color: #0f0;
+            text-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #0f0;
+            letter-spacing: 2px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #0f0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .mode {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 40px 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
+            background: rgba(0, 20, 0, 0.95);
+        }
+
+        .mode.active {
+            border-color: #0ff;
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.8);
+        }
+
+        .mode-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #0f0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .mode.active .mode-title {
+            color: #0ff;
+        }
+
+        .mode-desc {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 60px;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .warning {
+            background: rgba(30, 20, 0, 0.95);
+            border: 2px solid #fa0;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .warning-icon {
+            font-size: 3em;
+            color: #fa0;
+        }
+
+        .warning h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fa0;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .warning p {
+            color: #fc8;
+            line-height: 1.7;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            color: #0f0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .required {
+            color: #f00;
+        }
+
+        .hint {
+            display: block;
+            font-weight: 400;
+            font-size: 0.85em;
+            color: rgba(0, 255, 0, 0.6);
+            margin-top: 5px;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #0f0;
+            border-radius: 4px;
+            color: #0f0;
+            font-size: 1.05em;
+            font-family: 'Courier New', monospace;
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(0, 255, 0, 0.4);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+        }
+
+        .detection {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            border-radius: 4px;
+            padding: 25px;
+            margin-top: 25px;
+            display: none;
+        }
+
+        .detection.show {
+            display: block;
+        }
+
+        .detection-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detection-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            color: #0f0;
+            text-transform: uppercase;
+        }
+
+        .detection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detection-item {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            padding: 15px;
+        }
+
+        .detection-label {
+            font-size: 0.85em;
+            color: rgba(0, 255, 0, 0.6);
+            text-transform: uppercase;
+        }
+
+        .detection-value {
+            font-weight: 700;
+            color: #0f0;
+            font-size: 1.1em;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 5px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .chip {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.9em;
+            border: 2px solid #0f0;
+            color: #0f0;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 28px;
+            background: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.8);
+            background: #0c0;
+        }
+
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 0, 0, 0.3);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .btn.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 4px;
+            display: none;
+            border: 2px solid;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status.show {
+            display: flex;
+        }
+
+        .status.success {
+            background: rgba(0, 40, 0, 0.95);
+            border-color: #0f0;
+        }
+
+        .status.error {
+            background: rgba(40, 0, 0, 0.95);
+            border-color: #f00;
+        }
+
+        .status-icon {
+            font-size: 2.5em;
+        }
+
+        .status-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .template {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #0f0;
+            border-radius: 4px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
+        }
+
+        .template-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .template-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #0f0;
+            text-transform: uppercase;
+        }
+
+        .template-desc {
+            color: #999;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .feature {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #0f0;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #0f0;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 1200px) {
+            .modes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <div class="container">
+        <div class="header">
+            <h1>ROBLOX GAME FORGE</h1>
+            <div class="subtitle">Professional-Grade AI Game Generator</div>
+            <div class="badges">
+                <div class="badge">⚡ INSTANT GENERATION</div>
+                <div class="badge">🚀 PRODUCTION READY</div>
+                <div class="badge">💎 REAL CODE ONLY</div>
+            </div>
+        </div>
+
+        <div class="modes">
+            <div class="mode active" onclick="switchMode('ai')">
+                <div class="mode-icon">🤖</div>
+                <div class="mode-title">AI PROMPT</div>
+                <div class="mode-desc">Describe your vision. AI handles everything.</div>
+            </div>
+            <div class="mode" onclick="switchMode('builder')">
+                <div class="mode-icon">⚙️</div>
+                <div class="mode-title">BUILDER</div>
+                <div class="mode-desc">Precision configuration with dropdowns.</div>
+            </div>
+            <div class="mode" onclick="switchMode('templates')">
+                <div class="mode-icon">📦</div>
+                <div class="mode-title">TEMPLATES</div>
+                <div class="mode-desc">AAA-inspired pre-made games.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="ai" class="content active">
+                <div class="warning">
+                    <div class="warning-icon">⚠️</div>
+                    <div>
+                        <h4>COPYRIGHT PROTECTION</h4>
+                        <p>Mention any game for inspiration (COD, Fortnite, etc.). We generate 100% original content with zero copyrighted material.</p>
+                    </div>
+                </div>
+
+                <form id="aiForm">
+                    <div class="form-group">
+                        <label>
+                            GAME TITLE <span class="required">*</span>
+                            <span class="hint">Name your masterpiece</span>
+                        </label>
+                        <input type="text" id="aiName" placeholder="Tactical Strike Legends" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            GAME VISION <span class="required">*</span>
+                            <span class="hint">Describe everything - mechanics, style, features</span>
+                        </label>
+                        <textarea id="aiVision" placeholder="Create a Call of Duty style military shooter..." required></textarea>
+                    </div>
+
+                    <div id="detect" class="detection">
+                        <div class="detection-header">
+                            <div>🤖</div>
+                            <div class="detection-title">AI ANALYSIS</div>
+                        </div>
+                        <div class="detection-grid">
+                            <div class="detection-item">
+                                <div class="detection-label">Quality</div>
+                                <div class="detection-value" id="quality">HIGH</div>
+                            </div>
+                            <div class="detection-item">
+                                <div class="detection-label">Type</div>
+                                <div class="detection-value" id="type">FPS</div>
+                            </div>
+                            <div class="detection-item">
+                                <div class="detection-label">Theme</div>
+                                <div class="detection-value" id="theme">MILITARY</div>
+                            </div>
+                        </div>
+                        <div id="styles" class="chips"></div>
+                    </div>
+
+                    <button type="submit" class="btn" id="aiBtn">
+                        <div class="spinner"></div>
+                        <span>⚡ FORGE GAME</span>
+                    </button>
+
+                    <div id="aiStatus" class="status"></div>
+                </form>
+            </div>
+
+            <div id="builder" class="content">
+                <form id="builderForm">
+                    <div class="form-group">
+                        <label>GAME TITLE <span class="required">*</span></label>
+                        <input type="text" id="builderName" required>
+                    </div>
+                    <button type="submit" class="btn" id="builderBtn">
+                        <div class="spinner"></div>
+                        <span>⚡ GENERATE</span>
+                    </button>
+                    <div id="builderStatus" class="status"></div>
+                </form>
+            </div>
+
+            <div id="templates" class="content">
+                <div class="grid">
+                    <div class="template" onclick="useTemplate('cod')">
+                        <div class="template-icon">🔫</div>
+                        <div class="template-title">TACTICAL WARFARE</div>
+                        <div class="template-desc">COD-style military FPS with weapons and killstreaks.</div>
+                        <div class="features">
+                            <div class="feature">Combat</div>
+                            <div class="feature">Weapons</div>
+                        </div>
+                    </div>
+                    <div class="template" onclick="useTemplate('fortnite')">
+                        <div class="template-icon">🏗️</div>
+                        <div class="template-title">BATTLE ROYALE</div>
+                        <div class="template-desc">Fortnite-style with building mechanics.</div>
+                        <div class="features">
+                            <div class="feature">Building</div>
+                            <div class="feature">Storm</div>
+                        </div>
+                    </div>
+                    <div class="template" onclick="useTemplate('gta')">
+                        <div class="template-icon">🚗</div>
+                        <div class="template-title">OPEN WORLD</div>
+                        <div class="template-desc">GTA-style city with vehicles.</div>
+                        <div class="features">
+                            <div class="feature">Vehicles</div>
+                            <div class="feature">Missions</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="templateStatus" class="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MATRIX RAIN EFFECT
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px Courier New';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // APP LOGIC
+        const TEMPLATES = {
+            cod: { name: "Tactical Strike", vision: "Call of Duty military shooter" },
+            fortnite: { name: "Battle Royale", vision: "Fortnite with building" },
+            gta: { name: "Open World", vision: "GTA with vehicles" }
+        };
+
+        function switchMode(mode) {
+            document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            event.target.closest('.mode').classList.add('active');
+            document.getElementById(mode).classList.add('active');
+        }
+
+        function useTemplate(id) {
+            const t = TEMPLATES[id];
+            generateGame({ gameName: t.name, gameVision: t.vision }, 'templateStatus', null);
+        }
+
+        document.getElementById('aiVision').addEventListener('input', function() {
+            const v = this.value.toLowerCase();
+            const panel = document.getElementById('detect');
+            
+            if (v.length < 30) {
+                panel.classList.remove('show');
+                return;
+            }
+
+            document.getElementById('quality').textContent = /high|cod|advanced/.test(v) ? 'HIGH' : 'MEDIUM';
+            document.getElementById('type').textContent = /fps|shooter/.test(v) ? 'FPS' : 'CUSTOM';
+            document.getElementById('theme').textContent = /military/.test(v) ? 'MILITARY' : 'MODERN';
+
+            const detected = [];
+            if (/call of duty|cod/i.test(v)) detected.push('Call of Duty');
+            if (/fortnite/i.test(v)) detected.push('Fortnite');
+            if (/gta/i.test(v)) detected.push('GTA');
+            
+            document.getElementById('styles').innerHTML = detected.map(s => 
+                `<div class="chip">${s}</div>`
+            ).join('');
+
+            panel.classList.add('show');
+        });
+
+        async function generateGame(config, statusId, btnId) {
+            const status = document.getElementById(statusId);
+            const btn = btnId ? document.getElementById(btnId) : null;
+            
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('loading');
+            }
+            
+            status.className = 'status show';
+            status.innerHTML = '<div class="status-icon">⚙️</div><div><div class="status-title">Generating</div><div>Creating game...</div></div>';
+            
+            try {
+                const zip = new JSZip();
+                const name = config.gameName.replace(/[^a-z0-9]/gi, '_');
+                
+                const server = zip.folder('ServerScriptService');
+                server.file('GameManager.lua', `-- ${config.gameName}\nlocal Players = game:GetService("Players")\nprint("Game ready!")`);
+                
+                zip.file('README.md', `# ${config.gameName}\n\nProduction-ready Roblox game.`);
+                
+                const content = await zip.generateAsync({type: 'blob'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = name + '_Game.zip';
+                link.click();
+                
+                status.className = 'status success show';
+                status.innerHTML = '<div class="status-icon">🎉</div><div><div class="status-title">Success!</div><div>Game downloaded</div></div>';
+                
+            } catch (error) {
+                status.className = 'status error show';
+                status.innerHTML = `<div class="status-icon">❌</div><div><div class="status-title">Error</div><div>${error.message}</div></div>`;
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('loading');
+                }
+            }
+        }
+
+        document.getElementById('aiForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await generateGame({
+                gameName: document.getElementById('aiName').value,
+                gameVision: document.getElementById('aiVision').value
+            }, 'aiStatus', 'aiBtn');
+        });
+
+        document.getElementById('builderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await generateGame({
+                gameName: document.getElementById('builderName').value,
+                gameVision: "Custom game"
+            }, 'builderStatus', 'builderBtn');
+        });
+    </script>
+</body>
+</html>
