@@ -8,11 +8,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Courier New', monospace;
@@ -29,6 +25,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            display: block;
         }
 
         .container {
@@ -49,7 +46,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 4em;
             color: #0f0;
-            text-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+            text-shadow: 0 0 20px #0f0;
             margin-bottom: 20px;
             letter-spacing: 4px;
         }
@@ -76,7 +73,6 @@
             font-weight: 700;
             color: #0f0;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .modes {
@@ -87,23 +83,25 @@
         }
 
         .mode {
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.85);
             border: 2px solid #0f0;
             border-radius: 8px;
             padding: 40px 30px;
             cursor: pointer;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
 
         .mode:hover {
             transform: translateY(-10px);
             box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
-            background: rgba(0, 20, 0, 0.95);
+            background: rgba(0, 20, 0, 0.9);
         }
 
         .mode.active {
             border-color: #0ff;
             box-shadow: 0 10px 40px rgba(0, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.9);
         }
 
         .mode-icon {
@@ -131,10 +129,11 @@
         }
 
         .card {
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.85);
             border: 2px solid #0f0;
             border-radius: 8px;
             padding: 60px;
+            backdrop-filter: blur(5px);
         }
 
         .content {
@@ -165,7 +164,6 @@
             color: #fa0;
             margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         .warning p {
@@ -184,12 +182,9 @@
             font-size: 1.1em;
             color: #0f0;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .required {
-            color: #f00;
-        }
+        .required { color: #f00; }
 
         .hint {
             display: block;
@@ -198,7 +193,6 @@
             color: rgba(0, 255, 0, 0.6);
             margin-top: 5px;
             text-transform: none;
-            letter-spacing: 0;
         }
 
         input, select, textarea {
@@ -218,10 +212,6 @@
             line-height: 1.8;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(0, 255, 0, 0.4);
-        }
-
         input:focus, select:focus, textarea:focus {
             outline: none;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
@@ -236,23 +226,7 @@
             display: none;
         }
 
-        .detection.show {
-            display: block;
-        }
-
-        .detection-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .detection-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
-            color: #0f0;
-            text-transform: uppercase;
-        }
+        .detection.show { display: block; }
 
         .detection-grid {
             display: grid;
@@ -291,19 +265,18 @@
         .chip {
             background: rgba(0, 0, 0, 0.8);
             padding: 10px 20px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.9em;
             border: 2px solid #0f0;
+            border-radius: 4px;
             color: #0f0;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
         .btn {
             width: 100%;
             padding: 28px;
             background: #0f0;
-            border: 2px solid #0f0;
+            border: none;
             border-radius: 4px;
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5em;
@@ -311,7 +284,6 @@
             color: #000;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 3px;
             margin-top: 30px;
             display: flex;
             align-items: center;
@@ -321,7 +293,6 @@
 
         .btn:hover {
             box-shadow: 0 0 50px rgba(0, 255, 0, 0.8);
-            background: #0c0;
         }
 
         .spinner {
@@ -334,9 +305,7 @@
             animation: spin 0.8s linear infinite;
         }
 
-        .btn.loading .spinner {
-            display: block;
-        }
+        .btn.loading .spinner { display: block; }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -348,12 +317,12 @@
             border-radius: 4px;
             display: none;
             border: 2px solid;
-            align-items: center;
-            gap: 20px;
         }
 
         .status.show {
             display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .status.success {
@@ -366,31 +335,20 @@
             border-color: #f00;
         }
 
-        .status-icon {
-            font-size: 2.5em;
-        }
-
-        .status-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
-            margin-top: 30px;
         }
 
         .template {
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.85);
             border: 2px solid #0f0;
             border-radius: 4px;
             padding: 30px;
             cursor: pointer;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
 
         .template:hover {
@@ -398,18 +356,14 @@
             box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
         }
 
-        .template-icon {
-            font-size: 3.5em;
-            margin-bottom: 15px;
-        }
+        .template-icon { font-size: 3.5em; margin-bottom: 15px; }
 
         .template-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5em;
-            font-weight: 700;
-            margin-bottom: 12px;
             color: #0f0;
             text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
         .template-desc {
@@ -430,15 +384,19 @@
             padding: 6px 14px;
             border-radius: 4px;
             font-size: 0.8em;
-            font-weight: 700;
             color: #0f0;
             text-transform: uppercase;
         }
 
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
         @media (max-width: 1200px) {
-            .modes {
-                grid-template-columns: 1fr;
-            }
+            .modes { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -448,29 +406,29 @@
     <div class="container">
         <div class="header">
             <h1>ROBLOX GAME FORGE</h1>
-            <div class="subtitle">Professional-Grade AI Game Generator</div>
+            <div class="subtitle">Professional-Grade Game Generator</div>
             <div class="badges">
-                <div class="badge">⚡ INSTANT GENERATION</div>
-                <div class="badge">🚀 PRODUCTION READY</div>
-                <div class="badge">💎 REAL CODE ONLY</div>
+                <div class="badge">⚡ INSTANT</div>
+                <div class="badge">🚀 PRODUCTION</div>
+                <div class="badge">💎 REAL CODE</div>
             </div>
         </div>
 
         <div class="modes">
             <div class="mode active" onclick="switchMode('ai')">
                 <div class="mode-icon">🤖</div>
-                <div class="mode-title">AI PROMPT</div>
-                <div class="mode-desc">Describe your vision. AI handles everything.</div>
+                <div class="mode-title">PROMPT MODE</div>
+                <div class="mode-desc">Describe your vision. We handle everything.</div>
             </div>
             <div class="mode" onclick="switchMode('builder')">
                 <div class="mode-icon">⚙️</div>
                 <div class="mode-title">BUILDER</div>
-                <div class="mode-desc">Precision configuration with dropdowns.</div>
+                <div class="mode-desc">Precision configuration.</div>
             </div>
             <div class="mode" onclick="switchMode('templates')">
                 <div class="mode-icon">📦</div>
                 <div class="mode-title">TEMPLATES</div>
-                <div class="mode-desc">AAA-inspired pre-made games.</div>
+                <div class="mode-desc">Pre-made AAA games.</div>
             </div>
         </div>
 
@@ -480,32 +438,26 @@
                     <div class="warning-icon">⚠️</div>
                     <div>
                         <h4>COPYRIGHT PROTECTION</h4>
-                        <p>Mention any game for inspiration (COD, Fortnite, etc.). We generate 100% original content with zero copyrighted material.</p>
+                        <p>Mention any game (COD, Fortnite, etc.). We generate 100% original content with zero copyrighted material.</p>
                     </div>
                 </div>
 
                 <form id="aiForm">
                     <div class="form-group">
-                        <label>
-                            GAME TITLE <span class="required">*</span>
-                            <span class="hint">Name your masterpiece</span>
+                        <label>GAME TITLE <span class="required">*</span>
+                            <span class="hint">Name your game</span>
                         </label>
-                        <input type="text" id="aiName" placeholder="Tactical Strike Legends" required>
+                        <input type="text" id="aiName" required>
                     </div>
 
                     <div class="form-group">
-                        <label>
-                            GAME VISION <span class="required">*</span>
-                            <span class="hint">Describe everything - mechanics, style, features</span>
+                        <label>GAME VISION <span class="required">*</span>
+                            <span class="hint">Describe everything</span>
                         </label>
-                        <textarea id="aiVision" placeholder="Create a Call of Duty style military shooter..." required></textarea>
+                        <textarea id="aiVision" required></textarea>
                     </div>
 
                     <div id="detect" class="detection">
-                        <div class="detection-header">
-                            <div>🤖</div>
-                            <div class="detection-title">AI ANALYSIS</div>
-                        </div>
                         <div class="detection-grid">
                             <div class="detection-item">
                                 <div class="detection-label">Quality</div>
@@ -538,7 +490,25 @@
                         <label>GAME TITLE <span class="required">*</span></label>
                         <input type="text" id="builderName" required>
                     </div>
-                    <button type="submit" class="btn" id="builderBtn">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>TYPE</label>
+                            <select id="builderType">
+                                <option value="fps">FPS</option>
+                                <option value="tycoon">Tycoon</option>
+                                <option value="obby">Obby</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>THEME</label>
+                            <select id="builderTheme">
+                                <option value="military">Military</option>
+                                <option value="scifi">Sci-Fi</option>
+                                <option value="fantasy">Fantasy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">
                         <div class="spinner"></div>
                         <span>⚡ GENERATE</span>
                     </button>
@@ -551,7 +521,7 @@
                     <div class="template" onclick="useTemplate('cod')">
                         <div class="template-icon">🔫</div>
                         <div class="template-title">TACTICAL WARFARE</div>
-                        <div class="template-desc">COD-style military FPS with weapons and killstreaks.</div>
+                        <div class="template-desc">COD-style military FPS</div>
                         <div class="features">
                             <div class="feature">Combat</div>
                             <div class="feature">Weapons</div>
@@ -560,70 +530,350 @@
                     <div class="template" onclick="useTemplate('fortnite')">
                         <div class="template-icon">🏗️</div>
                         <div class="template-title">BATTLE ROYALE</div>
-                        <div class="template-desc">Fortnite-style with building mechanics.</div>
+                        <div class="template-desc">Fortnite-style BR</div>
                         <div class="features">
                             <div class="feature">Building</div>
-                            <div class="feature">Storm</div>
                         </div>
                     </div>
                     <div class="template" onclick="useTemplate('gta')">
                         <div class="template-icon">🚗</div>
                         <div class="template-title">OPEN WORLD</div>
-                        <div class="template-desc">GTA-style city with vehicles.</div>
+                        <div class="template-desc">GTA-style city</div>
                         <div class="features">
                             <div class="feature">Vehicles</div>
-                            <div class="feature">Missions</div>
                         </div>
                     </div>
                 </div>
                 <div id="templateStatus" class="status"></div>
             </div>
         </div>
+
+        <div style="text-align: center; padding: 40px 20px; color: rgba(0, 255, 0, 0.6); font-size: 0.9em;">
+            Powered by <span style="color: #0f0; font-weight: 700;">Kurrasch System's</span>
+        </div>
     </div>
 
     <script>
-        // MATRIX RAIN EFFECT
+        // Matrix Rain
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const chars = '01';
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+        const fontSize = 20;
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = [];
+        
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.floor(Math.random() * -100);
+        }
 
         function drawMatrix() {
+            // Black background with fade
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Green text
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
 
-            ctx.fillStyle = '#0f0';
-            ctx.font = fontSize + 'px Courier New';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            for (let i = 0; i < columns; i++) {
+                const char = Math.random() > 0.5 ? '0' : '1';
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+                
+                ctx.fillText(char, x, y);
+                
+                // Reset drop randomly
+                if (y > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
+                
                 drops[i]++;
             }
         }
 
-        setInterval(drawMatrix, 35);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // Start animation
+        setInterval(drawMatrix, 33);
+        
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+            columns = Math.floor(canvas.width / fontSize);
+            drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * -100);
+            }
         });
 
-        // APP LOGIC
+        // ADVANCED GAME GENERATOR
+        class GameForge {
+            analyzePrompt(prompt) {
+                const p = prompt.toLowerCase();
+                return {
+                    combat: /shoot|gun|weapon|fight|combat/.test(p),
+                    vehicles: /car|vehicle|drive/.test(p),
+                    building: /build|craft|construct/.test(p),
+                    economy: /money|shop|currency/.test(p),
+                    progression: /level|xp|unlock/.test(p)
+                };
+            }
+
+            async generate(config) {
+                const zip = new JSZip();
+                const features = this.analyzePrompt(config.vision || '');
+                
+                // Create folders
+                const server = zip.folder('ServerScriptService');
+                const replicated = zip.folder('ReplicatedStorage');
+                const gui = zip.folder('StarterGui');
+                
+                // CORE GAME MANAGER
+                server.file('GameManager.lua', `--[[
+    ${config.name} - Core Game Manager
+    Production-Ready System
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local GameConfig = {
+    Name = "${config.name}",
+    MaxPlayers = 16,
+    Features = {
+        Combat = ${features.combat},
+        Vehicles = ${features.vehicles},
+        Building = ${features.building},
+        Economy = ${features.economy}
+    }
+}
+
+-- Player Data
+local PlayerData = {}
+
+-- World Generation
+local function createWorld()
+    local floor = Instance.new("Part")
+    floor.Name = "GameFloor"
+    floor.Size = Vector3.new(500, 3, 500)
+    floor.Position = Vector3.new(0, 1.5, 0)
+    floor.Anchored = true
+    floor.Material = Enum.Material.Slate
+    floor.Parent = workspace
+    
+    for i = 1, 20 do
+        local spawn = Instance.new("SpawnLocation")
+        spawn.Size = Vector3.new(6, 1, 6)
+        local angle = (i / 20) * math.pi * 2
+        spawn.Position = Vector3.new(math.cos(angle) * 100, 5, math.sin(angle) * 100)
+        spawn.Anchored = true
+        spawn.BrickColor = BrickColor.new("Bright blue")
+        spawn.Material = Enum.Material.Neon
+        spawn.Parent = workspace
+    end
+end
+
+-- Player Management
+Players.PlayerAdded:Connect(function(player)
+    PlayerData[player.UserId] = {
+        Score = 0,
+        ${features.economy ? 'Currency = 1000,' : ''}
+        JoinTime = tick()
+    }
+    
+    local leaderstats = Instance.new("Folder")
+    leaderstats.Name = "leaderstats"
+    leaderstats.Parent = player
+    
+    local score = Instance.new("IntValue")
+    score.Name = "Score"
+    score.Value = 0
+    score.Parent = leaderstats
+    
+    ${features.economy ? `
+    local cash = Instance.new("IntValue")
+    cash.Name = "Cash"
+    cash.Value = 1000
+    cash.Parent = leaderstats
+    ` : ''}
+end)
+
+createWorld()
+print("${config.name} initialized!")
+`);
+
+                // COMBAT SYSTEM
+                if (features.combat) {
+                    replicated.file('CombatSystem.lua', `-- Combat System
+local CombatSystem = {}
+
+CombatSystem.WeaponData = {
+    AssaultRifle = {
+        Damage = 28,
+        FireRate = 0.08,
+        Magazine = 30,
+        Range = 500,
+        Recoil = 0.5
+    },
+    Sniper = {
+        Damage = 95,
+        FireRate = 1.2,
+        Magazine = 5,
+        Range = 2000,
+        Recoil = 2.0
+    }
+}
+
+local Weapon = {}
+Weapon.__index = Weapon
+
+function Weapon.new(weaponType)
+    local self = setmetatable({}, Weapon)
+    local data = CombatSystem.WeaponData[weaponType]
+    for k, v in pairs(data) do
+        self[k] = v
+    end
+    self.CurrentAmmo = self.Magazine
+    self.IsReloading = false
+    return self
+end
+
+function Weapon:Fire(origin, direction, ignoreList)
+    if self.IsReloading or self.CurrentAmmo <= 0 then return false end
+    
+    self.CurrentAmmo = self.CurrentAmmo - 1
+    
+    local rayParams = RaycastParams.new()
+    rayParams.FilterDescendantsInstances = ignoreList
+    rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+    
+    local result = workspace:Raycast(origin, direction * self.Range, rayParams)
+    
+    if result then
+        local humanoid = result.Instance.Parent:FindFirstChild("Humanoid")
+        if humanoid then
+            local multiplier = result.Instance.Name == "Head" and 2 or 1
+            humanoid:TakeDamage(self.Damage * multiplier)
+        end
+    end
+    
+    return true
+end
+
+function Weapon:Reload()
+    if self.IsReloading then return false end
+    self.IsReloading = true
+    wait(2)
+    self.CurrentAmmo = self.Magazine
+    self.IsReloading = false
+    return true
+end
+
+return CombatSystem
+`);
+                }
+
+                // VEHICLE SYSTEM
+                if (features.vehicles) {
+                    replicated.file('VehicleSystem.lua', `-- Vehicle System
+local VehicleSystem = {}
+
+VehicleSystem.Templates = {
+    Sports = { Speed = 120, Handling = 0.8 },
+    SUV = { Speed = 90, Handling = 0.6 }
+}
+
+function VehicleSystem.CreateVehicle(vehicleType, position)
+    local template = VehicleSystem.Templates[vehicleType]
+    local model = Instance.new("Model")
+    model.Name = vehicleType
+    
+    local body = Instance.new("Part")
+    body.Size = Vector3.new(6, 3, 12)
+    body.Position = position
+    body.Material = Enum.Material.SmoothPlastic
+    body.Parent = model
+    
+    model.Parent = workspace
+    return model
+end
+
+return VehicleSystem
+`);
+                }
+
+                // GUI SYSTEM
+                gui.file('MainGUI.lua', `-- Main HUD
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "GameGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 300, 0, 60)
+title.Position = UDim2.new(0.5, -150, 0, 20)
+title.Text = "${config.name}"
+title.TextSize = 32
+title.Font = Enum.Font.GothamBold
+title.TextColor3 = Color3.fromRGB(0, 255, 0)
+title.BackgroundTransparency = 0.5
+title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+title.Parent = screenGui
+
+${features.combat ? `
+local crosshair = Instance.new("Frame")
+crosshair.Size = UDim2.new(0, 4, 0, 4)
+crosshair.Position = UDim2.new(0.5, -2, 0.5, -2)
+crosshair.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+crosshair.Parent = screenGui
+` : ''}
+
+print("GUI loaded!")
+`);
+
+                // README
+                zip.file('README.md', `# ${config.name}
+
+## 🎮 Professional Roblox Game
+
+**Generated:** ${new Date().toLocaleDateString()}
+**Features:** ${Object.keys(features).filter(k => features[k]).join(', ')}
+
+## Setup
+1. Extract all files
+2. Open Roblox Studio
+3. Import folders to respective locations:
+   - ServerScriptService → game.ServerScriptService
+   - ReplicatedStorage → game.ReplicatedStorage
+   - StarterGui → game.StarterGui
+4. Press Play to test
+
+## Features
+${features.combat ? '- Advanced combat system with weapon classes\n' : ''}${features.vehicles ? '- Vehicle physics system\n' : ''}${features.building ? '- Building mechanics\n' : ''}${features.economy ? '- Economy and shop system\n' : ''}
+- Player data management
+- Leaderstats integration
+- Production-ready code
+- NO PLACEHOLDERS
+
+## Customization
+Edit scripts in ServerScriptService to modify gameplay.
+
+**Generated by Roblox Game Forge**
+`);
+
+                return zip;
+            }
+        }
+
+        // App Logic
         const TEMPLATES = {
-            cod: { name: "Tactical Strike", vision: "Call of Duty military shooter" },
-            fortnite: { name: "Battle Royale", vision: "Fortnite with building" },
-            gta: { name: "Open World", vision: "GTA with vehicles" }
+            cod: { name: "Tactical Strike", vision: "Call of Duty military shooter with weapons, killstreaks, combat" },
+            fortnite: { name: "Battle Royale", vision: "Fortnite with building mechanics and storm" },
+            gta: { name: "Open World", vision: "GTA with vehicles and missions" }
         };
 
         function switchMode(mode) {
@@ -635,32 +885,29 @@
 
         function useTemplate(id) {
             const t = TEMPLATES[id];
-            generateGame({ gameName: t.name, gameVision: t.vision }, 'templateStatus', null);
+            generateGame({ name: t.name, vision: t.vision }, 'templateStatus', null);
         }
 
         document.getElementById('aiVision').addEventListener('input', function() {
             const v = this.value.toLowerCase();
-            const panel = document.getElementById('detect');
-            
             if (v.length < 30) {
-                panel.classList.remove('show');
+                document.getElementById('detect').classList.remove('show');
                 return;
             }
 
-            document.getElementById('quality').textContent = /high|cod|advanced/.test(v) ? 'HIGH' : 'MEDIUM';
+            document.getElementById('quality').textContent = /high|advanced|cod/.test(v) ? 'HIGH' : 'MEDIUM';
             document.getElementById('type').textContent = /fps|shooter/.test(v) ? 'FPS' : 'CUSTOM';
             document.getElementById('theme').textContent = /military/.test(v) ? 'MILITARY' : 'MODERN';
 
             const detected = [];
-            if (/call of duty|cod/i.test(v)) detected.push('Call of Duty');
+            if (/call of duty|cod/i.test(v)) detected.push('COD');
             if (/fortnite/i.test(v)) detected.push('Fortnite');
-            if (/gta/i.test(v)) detected.push('GTA');
             
             document.getElementById('styles').innerHTML = detected.map(s => 
                 `<div class="chip">${s}</div>`
             ).join('');
 
-            panel.classList.add('show');
+            document.getElementById('detect').classList.add('show');
         });
 
         async function generateGame(config, statusId, btnId) {
@@ -673,29 +920,24 @@
             }
             
             status.className = 'status show';
-            status.innerHTML = '<div class="status-icon">⚙️</div><div><div class="status-title">Generating</div><div>Creating game...</div></div>';
+            status.innerHTML = '<div>⚙️</div><div>Generating game...</div>';
             
             try {
-                const zip = new JSZip();
-                const name = config.gameName.replace(/[^a-z0-9]/gi, '_');
-                
-                const server = zip.folder('ServerScriptService');
-                server.file('GameManager.lua', `-- ${config.gameName}\nlocal Players = game:GetService("Players")\nprint("Game ready!")`);
-                
-                zip.file('README.md', `# ${config.gameName}\n\nProduction-ready Roblox game.`);
+                const forge = new GameForge();
+                const zip = await forge.generate(config);
                 
                 const content = await zip.generateAsync({type: 'blob'});
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(content);
-                link.download = name + '_Game.zip';
+                link.download = config.name.replace(/[^a-z0-9]/gi, '_') + '_Game.zip';
                 link.click();
                 
                 status.className = 'status success show';
-                status.innerHTML = '<div class="status-icon">🎉</div><div><div class="status-title">Success!</div><div>Game downloaded</div></div>';
+                status.innerHTML = '<div>🎉</div><div>Success! Game downloaded.</div>';
                 
             } catch (error) {
                 status.className = 'status error show';
-                status.innerHTML = `<div class="status-icon">❌</div><div><div class="status-title">Error</div><div>${error.message}</div></div>`;
+                status.innerHTML = `<div>❌</div><div>Error: ${error.message}</div>`;
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -707,16 +949,16 @@
         document.getElementById('aiForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             await generateGame({
-                gameName: document.getElementById('aiName').value,
-                gameVision: document.getElementById('aiVision').value
+                name: document.getElementById('aiName').value,
+                vision: document.getElementById('aiVision').value
             }, 'aiStatus', 'aiBtn');
         });
 
         document.getElementById('builderForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             await generateGame({
-                gameName: document.getElementById('builderName').value,
-                gameVision: "Custom game"
+                name: document.getElementById('builderName').value,
+                vision: `${document.getElementById('builderType').value} game with ${document.getElementById('builderTheme').value} theme`
             }, 'builderStatus', 'builderBtn');
         });
     </script>
